@@ -15,6 +15,17 @@ projects, avoiding drift between repos over time.
 
 A flat ESLint config for TypeScript projects using `@typescript-eslint`.
 
+
+**Requirements:**
+
+Install dependencies
+
+```bash
+npm install --save-dev @datalackey/typescript-build-config
+npm install --save-dev @typescript-eslint/eslint-plugin @typescript-eslint/parser
+```
+
+
 **Usage:**
 
 ```js
@@ -25,14 +36,6 @@ export default [
     ...baseConfig,
     // project-specific overrides here
 ];
-```
-
-**Requirements:**
-
-Peer dependencies must be installed in the consuming project:
-
-```bash
-npm install --save-dev @typescript-eslint/eslint-plugin @typescript-eslint/parser
 ```
 
 The config expects a `tsconfig.eslint.json` at the root of the consuming
