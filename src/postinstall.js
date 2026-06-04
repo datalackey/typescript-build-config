@@ -3,7 +3,7 @@
 import { existsSync, copyFileSync } from 'fs';
 import { resolve } from 'path';
 
-const srcDir = resolve('node_modules/@datalackey/typescript-build-config/src/top-level');
+const srcDir = new URL('top-level', import.meta.url).pathname;
 
 const files = [
   { src: 'tsconfig.json',        dest: 'tsconfig.json' },
