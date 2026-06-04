@@ -1,8 +1,7 @@
-// src/postinstall.js
-// Run from: project root (where package.json lives)
 import { existsSync, copyFileSync } from 'fs';
 import { resolve } from 'path';
 
+const projectRoot = process.env.INIT_CWD ?? process.cwd();
 const srcDir = new URL('top-level', import.meta.url).pathname;
 
 const files = [
@@ -14,7 +13,7 @@ const files = [
 ];
 
 const alreadyExist = files
-  .map(function({ dest: dest }) { return resolve(dest); })
+  .map(function({ dest: dest }) { return resolve(projectRoot, dest); })
   .filter(function(destPath) { return existsSync(destPath); });
 
 if (alreadyExist.length > 0) {
@@ -27,7 +26,7 @@ if (alreadyExist.length > 0) {
 
 for (const { src: src, dest: dest } of files) {
   const srcPath = resolve(srcDir, src);
-  const destPath = resolve(dest);
+  const destPath = resolve(projectRoot, dest);
 
   if (!existsSync(srcPath)) {
     console.error('Missing source: ' + srcPath);
@@ -37,4 +36,3 @@ for (const { src: src, dest: dest } of files) {
   copyFileSync(srcPath, destPath);
   console.log('Copied ' + src + ' -> ' + dest);
 }
-
