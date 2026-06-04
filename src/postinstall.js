@@ -1,5 +1,9 @@
+// src/postinstall.js
+// Run from: project root (where package.json lives)
 import { existsSync, copyFileSync } from 'fs';
 import { resolve } from 'path';
+
+console.log('[@datalackey/typescript-build-config] Running postinstall...');
 
 const projectRoot = process.env.INIT_CWD ?? process.cwd();
 const srcDir = new URL('top-level', import.meta.url).pathname;
@@ -17,11 +21,12 @@ const alreadyExist = files
   .filter(function(destPath) { return existsSync(destPath); });
 
 if (alreadyExist.length > 0) {
-  console.error('Aborting: the following files already exist:');
+  console.log('[@datalackey/typescript-build-config] Skipping — the following files already exist:');
   for (const destPath of alreadyExist) {
-    console.error('  ' + destPath);
+    console.log('  ' + destPath);
   }
-  process.exit(1);
+  console.log('[@datalackey/typescript-build-config] Delete them manually to re-run postinstall.');
+  process.exit(0);
 }
 
 for (const { src: src, dest: dest } of files) {
@@ -29,10 +34,13 @@ for (const { src: src, dest: dest } of files) {
   const destPath = resolve(projectRoot, dest);
 
   if (!existsSync(srcPath)) {
-    console.error('Missing source: ' + srcPath);
+    console.error('[@datalackey/typescript-build-config] Missing source: ' + srcPath);
     process.exit(1);
   }
 
   copyFileSync(srcPath, destPath);
-  console.log('Copied ' + src + ' -> ' + dest);
+  console.log('[@datalackey/typescript-build-config] Copied ' + src + ' -> ' + dest);
 }
+
+console.log('[@datalackey/typescript-build-config] Postinstall complete.');
+
