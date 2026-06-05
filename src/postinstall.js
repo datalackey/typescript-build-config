@@ -44,4 +44,3 @@ for (const { src: src, dest: dest } of files) {
 }
 
 console.log('[@datalackey/typescript-build-config] Postinstall complete.');
-
