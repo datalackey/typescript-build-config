@@ -1,36 +1,39 @@
+# Contributing
+
+## Development
+
+There is no build step — files under `src/` are published as-is. Edit, then verify:
+
+```bash
+npm ci
+node src/postinstall.js   # exercise the postinstall against a scratch project if relevant
+```
+
 ## Publishing a New Version
 
-Run from the `typescript-build-config/` directory.
+Releases are fully automated — never run `npm version` or `npm publish` by hand.
 
-**1. Bump the version**
-```bash
-npm version patch   # or minor / major
-```
+Push a commit with a releasable conventional-commit prefix (`fix:`, `feat:`, `perf:`) to
+`main` and CI does the rest: it derives the bump level, runs `changeset version`, commits the
+bump back with `[skip ci]`, and publishes to npm.
 
-This updates `package.json` and creates a git tag.
-
-**2. Push the tag**
-```bash
-git push --follow-tags
-```
-
-**3. Publish to npm**
-```bash
-npm publish
-```
-
-You must be logged in to npm as a user with publish access to the `@datalackey`
-scope:
-```bash
-npm whoami
-```
-
-If not logged in:
-```bash
-npm login
-```
+The complete policy — bump mapping, forcing a minor/major bump, suppressing a release,
+handling `changeset status` errors, verifying a release, troubleshooting publish auth — is in
+[docs/RELEASE-PROCESS.md](docs/RELEASE-PROCESS.md).
 
 ## Adding New Config Presets
 
 Add new files under `src/` and expose them via the `exports` map in
 `package.json`. No build step is required — files are published as-is.
+
+## Adding New Pipeline Files
+
+Add the template under `src/pipeline/` and register it in the `pipelineFiles` list in
+`src/postinstall.js`. Pipeline files are distributed per-file: copied when absent, skipped
+when identical, and diff-warned (never overwritten) when the consumer's copy has diverged.
+
+Note that each pipeline file exists twice: the template under `src/pipeline/` (distributed
+to consumers via postinstall) and this repo's own live copy (`.github/workflows/`,
+`scripts/`, `.changeset/`) — this repo runs the same pipeline it distributes. When changing
+a template, update the live twin to match (for `auto-changeset.sh` the copies differ only
+in the substituted package name).

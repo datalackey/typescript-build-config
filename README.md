@@ -7,7 +7,11 @@ Shared build configuration presets for TypeScript-based projects.
 This package centralises common build tooling configuration across all
 TypeScript projects maintained under the `@datalackey` scope. The goal is a
 single source of truth for settings that should be held constant across
-projects, avoiding drift between repos over time.
+projects, avoiding drift between repos over time. Beyond configuration, it
+also encapsulates the common build **policy** and release **workflow logic**
+— the distributed pipeline files and the canonical release process in
+[docs/RELEASE-PROCESS.md](docs/RELEASE-PROCESS.md) — for reuse by every
+current and future project that depends on this base package.
 
 ## Installation
 
@@ -38,6 +42,8 @@ versions of these tools may produce peer dependency conflicts.
 - GitHub Actions release workflow (`.github/workflows/release.yml`)
 - Changeset config (`.changeset/config.json`)
 - Auto-changeset script (`scripts/auto-changeset.sh`)
+- NPM token diagnostic workflow (`.github/workflows/verify-npm-token.yml`) — see
+  [Troubleshooting Publish Auth](docs/RELEASE-PROCESS.md#troubleshooting-publish-auth)
 
 ## Release Pipeline
 
@@ -61,17 +67,14 @@ configuration is needed.
 
 ## Publishing
 
-Releases are automated via Changesets and GitHub Actions. On every push to
-`main`:
+Releases are automated via Changesets and GitHub Actions. The full policy —
+commit-prefix → bump mapping, forcing or suppressing a release, resolving
+`changeset status` errors, verifying a release, troubleshooting publish auth —
+is documented in [docs/RELEASE-PROCESS.md](docs/RELEASE-PROCESS.md). That
+document is the canonical release policy for every repo that installs this
+package.
 
-1. `scripts/auto-changeset.sh` scans commits since the last tag and maps
-   conventional commit prefixes to a bump level — `fix:` / `feat:` / `perf:`
-   → patch, `feat!:` / `BREAKING CHANGE` → major. `chore:` / `docs:` / `ci:`
-   etc. produce no release.
-2. `npx changeset version` bumps `package.json` and writes `CHANGELOG.md`.
-3. The version commit is pushed back to `main` with `[skip ci]` to avoid a
-   loop.
-4. `npx changeset publish` publishes to npm using the `NPM` org-level secret.
+Quick reference:
 
 **For a patch release** — push a `fix:` commit to `main`. The workflow handles
 the rest.
