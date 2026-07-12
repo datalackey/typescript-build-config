@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "prepack": "echo no build step required",
-    "postinstall": "node src/postinstall.js"
+    "postinstall": "node src/postinstall.js",
+    "test": "node --test"
   },
   "publishConfig": {
     "access": "public"

@@ -91,6 +91,12 @@ Evaluate the following options and end with a single recommendation:
    breaks every consumer's releases at once; pinning to a tag mitigates but reintroduces
    drift.
 
+   Design constraint: the shared workflow's publish job must be callable standalone, with
+   the caller supplying its own test-gating job via `needs:` (build-tools keeps
+   `nx run build-tools-workspace:ci` as job 1). The shared ci job's `npm test --if-present`
+   gate is for simple consumers with no other CI — build-tools should not adopt it, as it
+   would duplicate the NX build/test job.
+
 3. **Status quo plus.** Keep hand-maintained copies but adopt only the pieces that fit
    cleanly today (e.g. `verify-npm-token.yml`, which is fully generic — note it currently
    reads `secrets.NPM_TOKEN` in build-tools vs `secrets.NPM` in the shared version; the org

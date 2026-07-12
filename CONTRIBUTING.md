@@ -6,8 +6,13 @@ There is no build step — files under `src/` are published as-is. Edit, then ve
 
 ```bash
 npm ci
-node src/postinstall.js   # exercise the postinstall against a scratch project if relevant
+npm test    # policy enforcement, template/live-copy sync, postinstall behavior
 ```
+
+The suite (in `tests/`) exercises the distributed templates themselves: the auto-changeset
+policy (patch automation, breaking-change enforcement), drift between `src/pipeline/`
+templates and this repo's live copies, and postinstall's copy/skip/diff-warn behavior. CI
+runs it via `npm test --if-present` before any release.
 
 ## Publishing a New Version
 
