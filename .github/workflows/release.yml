@@ -56,6 +56,10 @@ jobs:
           git add .
           git diff --staged --quiet && echo "No changesets to release" || \
             (git commit -m "chore: release [skip ci]" && git push)
+      - name: Verify npm auth
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM }}
       - name: Publish
         run: npx changeset publish
         env:
