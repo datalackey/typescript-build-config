@@ -1,5 +1,11 @@
 # @datalackey/typescript-build-config
 
+## 0.1.4
+
+### Patch Changes
+
+- 893259e: undo test of breaking chng
+
 ## 0.1.3
 
 ### Patch Changes
