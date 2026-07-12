@@ -18,13 +18,15 @@ npm install --save-dev @datalackey/typescript-build-config
 The postinstall script copies starter config files into your project root and
 sets up the release pipeline (see below).
 
-## Support for New Projects Only
+## Dependency Strategy
 
-This package intentionally lists `eslint`, `prettier`, and the
-`@typescript-eslint/*` plugins as `dependencies` rather than
-`peerDependencies`. This is by design — the package targets new projects only
-and is not intended for use in existing projects that may have conflicting
-versions of these tools.
+`eslint` and `prettier` are listed as `dependencies` and are pulled in
+automatically. The `@typescript-eslint/*` plugins are listed in both
+`dependencies` and `peerDependencies` — the peer declaration pins the minimum
+version to `^8.57.1` to avoid a `ts-api-utils` incompatibility with TS 5.4+.
+
+This package targets new projects. Use in existing projects that pin older
+versions of these tools may produce peer dependency conflicts.
 
 ## Current Contents
 
