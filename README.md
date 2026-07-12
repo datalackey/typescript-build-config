@@ -24,7 +24,6 @@ npm install  --ignore-engines  --save-dev @datalackey/typescript-build-config
 
 This package intentionally lists `eslint`, `prettier`, and the `@typescript-eslint/*` plugins as `dependencies` rather than `peerDependencies`.  This is by design — the package targets new projects only and is not intended for use in existing projects that may have conflicting versions of these tools.
 
-
 ## Current Contents
 
     - ESLint Config
