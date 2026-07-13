@@ -1,5 +1,11 @@
 # @datalackey/typescript-build-config
 
+## 0.1.6
+
+### Patch Changes
+
+- a65149c: Warn when a consuming project is missing the `update-all-format` target.
+
 ## 0.1.5
 
 ### Patch Changes
