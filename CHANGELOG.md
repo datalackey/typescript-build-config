@@ -1,5 +1,12 @@
 # @datalackey/typescript-build-config
 
+## 0.1.8
+
+### Patch Changes
+
+- - feat: add auto-generated TOC and wire update-markdown-toc into ci
+  - feat: add format check to ci, self-install no-op, and consolidate README conventions
+
 ## 0.1.7
 
 ### Patch Changes
