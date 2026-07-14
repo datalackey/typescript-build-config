@@ -56,7 +56,7 @@ For the Sideways Version Bump Policy section: keep the build-tools specifics (th
 
 For "How the Automated Release Pipeline Works": the stub should note the one build-tools
 addition not in the canonical flow — the post-publish smoke test that installs
-`@datalackey/autogen-markdown-doc` from the registry and runs it against the `math-cli-nx`
+`@doikayt/autogen-markdown-doc` from the registry and runs it against the `math-cli-nx`
 fixture — and link to the canonical doc for the rest.
 
 After editing, regenerate the TOC (`update-markdown-toc` is this repo's own tool) and run the
