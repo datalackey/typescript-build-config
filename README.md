@@ -124,56 +124,50 @@ The release pipeline requires an `NPM` secret stored at the GitHub organisation
 level. All repos under the org inherit it automatically — no per-repo secret
 configuration is needed.
 
-## The `ci` Script — Required Convention
+## Conventions Every Project Must Adhere To
 
-Every project that installs this package **must** define a `ci` script in its
-`package.json`. The release workflow calls `npm run ci` as its CI gate. A
-project without a `ci` script will fail the CI job — which is the correct
-signal that the convention has not been met.
+Every project that installs this package must implement two named entry points.
+`postinstall` warns on every `npm install` or `npm update` until each is in
+place.
 
-This package does not mandate a build orchestrator. Projects may use plain npm
-scripts, NX, or any other toolchain — the only requirement is that
-`package.json` exposes a `ci` entry point that the release workflow can call
-uniformly.
+### The `ci` script
 
-The `ci` script is the single entry point for "everything that must pass before
-a release". What it calls internally is up to the project:
+Every project must expose a `ci` script in `package.json`. The release workflow
+calls `npm run ci` as its CI gate. A project without a `ci` script will fail
+the CI job — the correct signal that the convention has not been met.
+
+`ci` is the single entry point for "everything that must pass before a release":
+formatting checks, tests, linting — whatever the project requires. What it
+calls internally is up to the project:
 
 ```json
-{ "scripts": { "ci": "npm run check-docs && vitest run && playwright test" } }
+{ "scripts": { "ci": "prettier --check src/ && vitest run && playwright test" } }
 ```
 
-### NX projects: the shim requirement
+`npm run ci` doubles as your local "simulate CI" command.
 
-NX-based projects must still provide the `package.json` `ci` entry as a thin
-shim, even if it only delegates to NX targets:
+**Invariant:** if `npm run ci` passes locally, and you commit and push, the
+remote CI job will pass.
+
+#### NX projects
+
+NX-based projects must still expose `ci` as a thin shim in `package.json`, even
+if it only delegates to NX targets:
 
 ```json
 { "scripts": { "ci": "nx run-many --target=ci --all" } }
 ```
 
 The release workflow is NX-agnostic — it calls `npm run ci`, never NX directly.
-The shim is the contract that connects this universal workflow to whatever
-toolchain the project uses internally.
 
-### Local use
+### The `update-all-format` target
 
-`npm run ci` is your local "simulate CI" command. A passing `npm run ci`
-locally means the release CI job will pass.
+Every project must expose an `update-all-format` entry point — either a
+`package.json` script or an NX `project.json` target. This is the single
+command for "reformat everything before reviewing a diff": run it before
+committing to keep diffs clean and reviewable.
 
-INVARIANT:  any project that depends on this base project should guarantee that if a developer
-invokes the 'npm run ci' successfully, then commits everything in their workspace, and pushes 
-to git, then the subsequent build should pass.
-
-## The `update-all-format` Target — Required Convention
-
-Every project that installs this package **must** define an `update-all-format`
-entry point — either a `package.json` script or an NX `project.json` target.
-This is the single command for "reformat everything before reviewing a diff":
-run it before committing to keep diffs clean and reviewable.
-
-The plugin enforces the **name only**, not the content. What it invokes is up
-to the project:
+The plugin enforces the name only, not the content:
 
 ```json
 { "scripts": { "update-all-format": "prettier --write src/ && npm run update-markdown-docs" } }
@@ -182,13 +176,18 @@ to the project:
 Or as an NX target:
 
 ```json
-{ "targets": { "update-all-format": { "executor": "nx:run-commands", "options": { "command": "prettier --write src/" } } } }
+{
+  "targets": {
+    "update-all-format": {
+      "executor": "nx:run-commands",
+      "options": { "command": "prettier --write src/" }
+    }
+  }
+}
 ```
 
 If neither is found, `postinstall` prints a warning (non-fatal) on every
-`npm install` / `npm update` until the target is added.
-
-### NX projects
+`npm install` or `npm update` until the target is added.
 
 NX projects may define the target in `project.json` instead of `package.json`
 scripts — the postinstall check recognises both. There is no shim requirement
@@ -218,6 +217,40 @@ release job until one is committed.
 
 **Manual publish (emergency):** trigger the workflow manually via
 **GitHub Actions → CI / Release → Run workflow** on the `main` branch.
+
+## For Maintainers
+
+### Clone and install
+
+```bash
+git clone git@github.com:datalackey/typescript-build-config.git
+cd typescript-build-config
+npm install
+```
+
+The postinstall script detects that it is running inside the plugin repo itself
+and exits immediately — no config stubs or pipeline files are copied.
+
+### Run the full CI suite
+
+```bash
+npm run ci
+```
+
+This is the same entry point mandated for every consumer repo. In this project
+it runs a Prettier format check followed by the full test suite:
+
+```
+npm run ci  →  prettier --check src/  →  node --test
+```
+
+A passing `npm run ci` locally means the remote CI job will pass.
+
+To auto-fix formatting before verifying:
+
+```bash
+npm run update-all-format && npm run ci
+```
 
 ## License
 
