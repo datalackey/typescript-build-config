@@ -1,5 +1,11 @@
 # @datalackey/typescript-build-config
 
+## 0.1.9
+
+### Patch Changes
+
+- - fix: allow workflow_dispatch to trigger the release job
+
 ## 0.1.8
 
 ### Patch Changes
