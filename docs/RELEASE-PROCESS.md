@@ -1,7 +1,7 @@
 # Release Process and Policy
 
 This document is the canonical statement of the release policy promoted by
-`@datalackey/typescript-build-config` and implemented by the pipeline files it distributes
+`@doikayt/typescript-build-config` and implemented by the pipeline files it distributes
 (consumer-repo destination → template source):
 
 - [`.github/workflows/release.yml`](../src/pipeline/release.yml)

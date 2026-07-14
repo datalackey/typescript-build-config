@@ -1,9 +1,9 @@
-# @datalackey/typescript-build-config
+# @doikayt/typescript-build-config
 
 Shared build configuration presets for TypeScript-based projects.
 
 <!-- TOC:START -->
-- [@datalackey/typescript-build-config](#datalackeytypescript-build-config)
+- [@doikayt/typescript-build-config](#doikayttypescript-build-config)
   - [Purpose](#purpose)
   - [Installation](#installation)
   - [Dependency Strategy](#dependency-strategy)
@@ -24,7 +24,7 @@ Shared build configuration presets for TypeScript-based projects.
 ## Purpose
 
 This package centralises common build tooling configuration and release policy across all
-TypeScript projects maintained under the `@datalackey` scope. The goal is a
+TypeScript projects maintained under the `@doikayt` scope. The goal is a
 single source of truth for such settings that should be held constant across
 projects, avoiding drift between repos over time.
 The plugin encapsulates common build **policy** and release **workflow logic**
@@ -34,7 +34,7 @@ via the pipeline files it installs into each consumer repo and the canonical rel
 ## Installation
 
 ```bash
-npm install --save-dev @datalackey/typescript-build-config
+npm install --save-dev @doikayt/typescript-build-config
 ```
 
 The postinstall script copies starter config files into your project root and
@@ -71,7 +71,7 @@ _states_ it:
 
 ```
         ┌─────────────────────────────────────────────────┐
-        │      @datalackey/typescript-build-config        │
+        │        @doikayt/typescript-build-config        │
         │                                                 │
         │  presets     src/eslint.js  prettier  tsconfig  │
         │  stubs       src/top-level/*                    │
@@ -246,7 +246,7 @@ release job until one is committed.
 ### Clone and install
 
 ```bash
-git clone git@github.com:datalackey/typescript-build-config.git
+git clone git@github.com:doikayt/typescript-build-config.git
 cd typescript-build-config
 npm install
 ```

@@ -6,7 +6,7 @@ Paste everything below this line into a Claude session running in the `build-too
 
 The generic release policy formerly documented only in this repo's
 `javascript/docs/CONTRIBUTING.md` has been extracted into the
-`@datalackey/typescript-build-config` package, whose repo now hosts the canonical policy
+`@doikayt/typescript-build-config` package, whose repo now hosts the canonical policy
 document:
 
     https://github.com/doikayt/typescript-build-config/blob/main/docs/RELEASE-PROCESS.md
@@ -75,13 +75,13 @@ Commit as `docs: replace generic release policy with links to typescript-build-c
 Today `.github/workflows/javascript-ci.yml` has two jobs: `build` (tests) and `release`
 (build → `scripts/auto-changeset.sh` → `changeset version` → commit bumps → `changeset
 publish` → smoke test). The release steps are hand-maintained copies of logic that
-`@datalackey/typescript-build-config` now distributes to consumer repos via postinstall
+`@doikayt/typescript-build-config` now distributes to consumer repos via postinstall
 (`src/pipeline/release.yml`, `auto-changeset.sh`, `verify-npm-token.yml`,
 `changeset-config.json`).
 
 Evaluate the following options and end with a single recommendation:
 
-1. **Adopt the postinstall distribution.** Install `@datalackey/typescript-build-config` as a
+1. **Adopt the postinstall distribution.** Install `@doikayt/typescript-build-config` as a
    devDependency of the `javascript/` workspace so its postinstall manages the pipeline files
    (copy when absent, skip when identical, diff-warn when diverged). Check the blockers:
    - The postinstall-distributed `auto-changeset.sh` template substitutes a single

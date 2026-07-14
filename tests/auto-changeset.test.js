@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 // the exact artifact consumer repos receive.
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const TEMPLATE = readFileSync(join(repoRoot, 'src/pipeline/auto-changeset.sh'), 'utf8');
-const PKG = '@datalackey/fake-consumer';
+const PKG = '@doikayt/fake-consumer';
 
 function git(cwd, ...args) {
   execFileSync('git', args, { cwd, stdio: 'pipe' });

@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const postinstall = join(repoRoot, 'src', 'postinstall.js');
-const PKG = '@datalackey/fake-consumer';
+const PKG = '@doikayt/fake-consumer';
 
 function makeConsumer() {
   const dir = mkdtempSync(join(tmpdir(), 'tbc-postinstall-'));

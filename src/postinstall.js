@@ -10,7 +10,7 @@ import { execSync } from "child_process";
 import { tmpdir } from "os";
 import { join } from "path";
 
-const PREFIX = "[@datalackey/typescript-build-config]";
+const PREFIX = "[@doikayt/typescript-build-config]";
 
 console.log(`${PREFIX} Running postinstall...`);
 
@@ -19,7 +19,7 @@ const projectPkg = JSON.parse(
   readFileSync(resolve(projectRoot, "package.json"), "utf8"),
 );
 
-if (projectPkg.name === "@datalackey/typescript-build-config") {
+if (projectPkg.name === "@doikayt/typescript-build-config") {
   console.log(`${PREFIX} Self-install detected — postinstall is a no-op.`);
   process.exit(0);
 }

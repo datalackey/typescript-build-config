@@ -23,7 +23,7 @@ const pairs = [
     substitute: (s) =>
       s.replace(
         'PACKAGES=("__PACKAGE_NAME__")',
-        'PACKAGES=("@datalackey/typescript-build-config")'
+        'PACKAGES=("@doikayt/typescript-build-config")'
       ),
   },
 ];
