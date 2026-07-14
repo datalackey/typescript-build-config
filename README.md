@@ -2,17 +2,34 @@
 
 Shared build configuration presets for TypeScript-based projects.
 
+<!-- TOC:START -->
+- [@datalackey/typescript-build-config](#datalackeytypescript-build-config)
+  - [Purpose](#purpose)
+  - [Installation](#installation)
+  - [Dependency Strategy](#dependency-strategy)
+  - [Current Contents](#current-contents)
+  - [Delivery Model](#delivery-model)
+  - [Release Pipeline](#release-pipeline)
+  - [Conventions Every Project Must Adhere To](#conventions-every-project-must-adhere-to)
+    - [The `ci` script](#the-ci-script)
+      - [NX projects](#nx-projects)
+    - [The `update-all-format` target](#the-update-all-format-target)
+  - [Publishing](#publishing)
+  - [For Maintainers](#for-maintainers)
+    - [Clone and install](#clone-and-install)
+    - [Run the full CI suite](#run-the-full-ci-suite)
+  - [License](#license)
+<!-- TOC:END -->
+
 ## Purpose
 
 This package centralises common build tooling configuration and release policy across all
 TypeScript projects maintained under the `@datalackey` scope. The goal is a
 single source of truth for such settings that should be held constant across
-projects, avoiding drift between repos over time. 
+projects, avoiding drift between repos over time.
 The plugin encapsulates common build **policy** and release **workflow logic**
 via the pipeline files it installs into each consumer repo and the canonical release process in
 [docs/RELEASE-PROCESS.md](docs/RELEASE-PROCESS.md).
-
-
 
 ## Installation
 
@@ -49,8 +66,8 @@ versions of these tools may produce peer dependency conflicts.
 ## Delivery Model
 
 This package standardizes downstream repos through three delivery channels — script and
-config artifacts that *implement* the common policy, and a canonical document that
-*states* it:
+config artifacts that _implement_ the common policy, and a canonical document that
+_states_ it:
 
 ```
         ┌─────────────────────────────────────────────────┐
@@ -141,7 +158,9 @@ formatting checks, tests, linting — whatever the project requires. What it
 calls internally is up to the project:
 
 ```json
-{ "scripts": { "ci": "prettier --check src/ && vitest run && playwright test" } }
+{
+  "scripts": { "ci": "prettier --check src/ && vitest run && playwright test" }
+}
 ```
 
 `npm run ci` doubles as your local "simulate CI" command.
@@ -170,7 +189,11 @@ committing to keep diffs clean and reviewable.
 The plugin enforces the name only, not the content:
 
 ```json
-{ "scripts": { "update-all-format": "prettier --write src/ && npm run update-markdown-docs" } }
+{
+  "scripts": {
+    "update-all-format": "prettier --write src/ && npm run update-markdown-docs"
+  }
+}
 ```
 
 Or as an NX target:
