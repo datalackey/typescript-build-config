@@ -1,5 +1,12 @@
 # @datalackey/typescript-build-config
 
+## 0.1.11
+
+### Patch Changes
+
+- - feat: copy brand assets to docs/assets/ on postinstall; update delivery model diagram
+  - feat: add Playwright NixOS launch-options helper and brand assets
+
 ## 0.1.10
 
 ### Patch Changes
