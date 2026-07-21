@@ -63,9 +63,14 @@ versions of these tools may produce peer dependency conflicts.
 - NPM token diagnostic workflow (`.github/workflows/verify-npm-token.yml`) — see
   [Troubleshooting Publish Auth](docs/RELEASE-PROCESS.md#troubleshooting-publish-auth)
 - Playwright config helper (`@doikayt/typescript-build-config/playwright`) — `nixChromiumLaunchOptions()`
-  discovers the system Chromium on NixOS; `definePlaywrightConfig()` wraps `defineConfig` and
+  discovers the system Chromium on quirky NixOS; `definePlaywrightConfig()` wraps `defineConfig` and
   merges the result in. Transparent no-op on platforms where Playwright's bundled browser works.
-  Requires `@playwright/test` in the consumer project.
+  `@playwright/test` is an **optional peer dependency** — it is not installed automatically.
+  Any project that imports `./playwright` must declare it explicitly in its own `devDependencies`:
+
+  ```bash
+  npm install --save-dev @playwright/test
+  ```
 
   ```ts
   import { definePlaywrightConfig } from "@doikayt/typescript-build-config/playwright";
