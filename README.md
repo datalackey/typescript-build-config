@@ -23,8 +23,8 @@ Shared build configuration presets for TypeScript-based projects.
 
 ## Purpose
 
-This package centralises common build tooling configuration and release policy across all
-TypeScript projects maintained under the `@doikayt` scope. The goal is a
+This package centralises common build tooling configuration, release policy, and content assets
+across all TypeScript projects maintained under the `@doikayt` scope. The goal is a
 single source of truth for such settings that should be held constant across
 projects, avoiding drift between repos over time.
 The plugin encapsulates common build **policy** and release **workflow logic**
@@ -62,6 +62,22 @@ versions of these tools may produce peer dependency conflicts.
 - Auto-changeset script (`scripts/auto-changeset.sh`)
 - NPM token diagnostic workflow (`.github/workflows/verify-npm-token.yml`) — see
   [Troubleshooting Publish Auth](docs/RELEASE-PROCESS.md#troubleshooting-publish-auth)
+- Playwright config helper (`@doikayt/typescript-build-config/playwright`) — `nixChromiumLaunchOptions()`
+  discovers the system Chromium on NixOS; `definePlaywrightConfig()` wraps `defineConfig` and
+  merges the result in. Transparent no-op on platforms where Playwright's bundled browser works.
+  Requires `@playwright/test` in the consumer project.
+
+  ```ts
+  import { definePlaywrightConfig } from "@doikayt/typescript-build-config/playwright";
+  export default definePlaywrightConfig({
+      testDir: "code/tests/e2e",
+      testMatch: "**/*.spec.ts",
+      use: { baseURL: "http://localhost:8080" },
+  });
+  ```
+
+- Brand assets (`assets/doikayt-logo.png`, `assets/doikayt-logo.svg`) — shared logos for use
+  across all `@doikayt` project READMEs and documentation
 
 ## Delivery Model
 
