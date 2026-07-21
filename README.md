@@ -95,9 +95,10 @@ _states_ it:
         ┌─────────────────────────────────────────────────┐
         │        @doikayt/typescript-build-config        │
         │                                                 │
-        │  presets     src/eslint.js  prettier  tsconfig  │
+        │  presets  eslint  prettier  tsconfig  playwright│
         │  stubs       src/top-level/*                    │
         │  pipeline    src/pipeline/*                     │
+        │  assets      assets/*                           │
         │  policy      docs/RELEASE-PROCESS.md            │
         └─────────┬───────────────┬───────────────┬───────┘
                   │               │               │
@@ -105,10 +106,11 @@ _states_ it:
      IN PLACE     │    ON INSTALL │  NEVER COPIED │
                   │               │               │
  presets stay in  │ postinstall   │ cited by URL  │
- node_modules —   │ seeds stubs + │ only; one     │
- updates flow     │ pipeline once;│ canonical     │
- with npm update  │ consumer owns │ copy — drift  │
-                  │ them; drift ⇒ │ is impossible │
+ node_modules —   │ seeds stubs,  │ only; one     │
+ updates flow     │ pipeline, and │ canonical     │
+ with npm update  │ assets once;  │ copy — drift  │
+                  │ consumer owns │ is impossible │
+                  │ them; drift ⇒ │               │
                   │ diff warning  │               │
                   ▼               ▼               ▼
         ┌─────────────────────────────────────────────────┐
@@ -120,6 +122,7 @@ _states_ it:
         │                         node_modules  (chan. 1) │
         │  owned pipeline:  .github/workflows/release.yml │
         │                   scripts/auto-changeset.sh     │
+        │  owned assets:    docs/assets/doikayt-logo.*    │
         │  CONTRIBUTING.md ─cites URL─► RELEASE-PROCESS.md│
         └─────────────────────────────────────────────────┘
 ```
@@ -138,6 +141,10 @@ _states_ it:
 - **Owned pipeline** — the release workflow and scripts, copied on install. "Owned" by
   the **consumer repo**: it may edit its copies, upstream never overwrites them, and
   postinstall prints a diff warning when a copy drifts from the canonical template.
+- **Assets** — brand logos seeded once into `docs/assets/` by the postinstall script.
+  Same channel-2 treatment as the pipeline: copied if absent, skipped if identical,
+  warning (without a text diff) if diverged. Consumer owns the copy; it will not be
+  silently overwritten.
 - **Policy** — the release process itself, stated once in
   [docs/RELEASE-PROCESS.md](docs/RELEASE-PROCESS.md). Consumers reference it by URL from
   their own contributor docs (as the consumer box shows) — never copied, so it cannot

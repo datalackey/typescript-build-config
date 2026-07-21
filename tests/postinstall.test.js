@@ -36,6 +36,8 @@ test('fresh install copies config and pipeline files, substituting the package n
     '.github/workflows/verify-npm-token.yml',
     '.changeset/config.json',
     'scripts/auto-changeset.sh',
+    'docs/assets/doikayt-logo.png',
+    'docs/assets/doikayt-logo.svg',
   ]) {
     assert.ok(existsSync(join(dir, f)), `expected ${f} to be copied`);
   }
@@ -84,6 +86,26 @@ test('update-all-format in project.json targets suppresses the warning', () => {
   const res = run(dir);
   assert.equal(res.status, 0, res.stderr);
   assert.doesNotMatch(res.stderr, /Missing target: update-all-format/);
+});
+
+test('second run skips identical asset files without warnings', () => {
+  const dir = makeConsumer();
+  run(dir);
+  const res = run(dir);
+  assert.equal(res.status, 0, res.stderr);
+  assert.doesNotMatch(res.stderr, /doikayt-logo.*WARNING|WARNING.*doikayt-logo/);
+});
+
+test('diverged asset file is preserved and produces a warning', () => {
+  const dir = makeConsumer();
+  run(dir);
+  const target = join(dir, 'docs', 'assets', 'doikayt-logo.svg');
+  const before = readFileSync(target, 'utf8');
+  appendFileSync(target, '<!-- local edit -->\n');
+  const res = run(dir);
+  assert.equal(res.status, 0);
+  assert.match(res.stderr, /doikayt-logo\.svg differs from canonical version/);
+  assert.equal(readFileSync(target, 'utf8'), before + '<!-- local edit -->\n', 'local copy must not be overwritten');
 });
 
 test('missing update-all-format in both package.json and project.json prints a warning, exit 0', () => {

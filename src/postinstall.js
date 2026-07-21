@@ -108,6 +108,36 @@ for (const { src, dest } of pipelineFiles) {
   }
 }
 
+// --- Asset files: seeded into docs/assets/, same per-file copy/warn as pipeline ---
+
+const assetDir = new URL("../assets", import.meta.url).pathname;
+
+const assetFiles = [
+  { src: "doikayt-logo.png", dest: "docs/assets/doikayt-logo.png" },
+  { src: "doikayt-logo.svg", dest: "docs/assets/doikayt-logo.svg" },
+];
+
+for (const { src, dest } of assetFiles) {
+  const srcPath = resolve(assetDir, src);
+  const destPath = resolve(projectRoot, dest);
+
+  if (!existsSync(destPath)) {
+    mkdirSync(dirname(destPath), { recursive: true });
+    copyFileSync(srcPath, destPath);
+    console.log(`${PREFIX} Copied ${src} -> ${dest}`);
+    continue;
+  }
+
+  const canonical = readFileSync(srcPath);
+  const existing = readFileSync(destPath);
+  if (canonical.equals(existing)) continue;
+
+  console.warn(
+    `${PREFIX} WARNING: ${dest} differs from canonical version — skipping. ` +
+      `To resync: cp node_modules/@doikayt/typescript-build-config/assets/${src} ${dest}`,
+  );
+}
+
 // --- update-all-format convention check ---
 
 let hasUpdateAllFormat = !!projectPkg.scripts?.["update-all-format"];
